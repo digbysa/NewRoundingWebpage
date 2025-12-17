@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Device Rounding - Local CSV Viewer</title>
+  <link rel="stylesheet" href="./Index - Device Rounding_files/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="./Index - Device Rounding_files/dataTables.bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="./Index - Device Rounding_files/jquery.dataTables.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.8/css/dataTables.bootstrap5.min.css" />
+  <link rel="stylesheet" href="./Index - Device Rounding_files/site.css" />
+  <link rel="stylesheet" href="./Index - Device Rounding_files/SideBar.css" />
+  <link rel="stylesheet" href="./Index - Device Rounding_files/SideMenuToggle.css" />
+  <link rel="stylesheet" href="./Index - Device Rounding_files/Master.css" />
+  <link rel="stylesheet" href="./Index - Device Rounding_files/OutSystemsReactWidgets.css" />
+  <link rel="stylesheet" href="./Index - Device Rounding_files/default-ocean-blue.css" />
+  <style>
+    body {
+      background-color: #f6f7fb;
+    }
+
+    .local-header {
+      background-color: #5876aa;
+      color: #fff;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .local-header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .search-card {
+      background: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 1.25rem;
+      margin-top: -1.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .search-card label {
+      font-weight: 600;
+    }
+
+    .table-card {
+      background: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 1rem 1rem 0.5rem;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: #e8f0fe;
+      color: #1a3e72;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid p-0" style="min-height: 100vh;">
+    <div class="local-header">
+      <div class="d-flex align-items-center gap-3">
+        <img src="./Index - Device Rounding_files/Nttlogo_blue.png" alt="NTT Data" style="height: 42px;" />
+        <div>
+          <div class="status-pill">Local Demo</div>
+          <h1 class="mt-2">Device Rounding</h1>
+          <p class="mb-0">CSV-backed clone for offline exploration</p>
+        </div>
+      </div>
+      <div class="text-end">
+        <p class="mb-0 fw-bold">Data source</p>
+        <p class="mb-0">Data/Computers.csv</p>
+      </div>
+    </div>
+
+    <div class="container mt-3">
+      <div class="search-card">
+        <div class="row gy-3 align-items-end">
+          <div class="col-12 col-md-8">
+            <label class="form-label" for="device-search">Search by Serial Number, Hostname, or Asset Tag</label>
+            <input id="device-search" type="text" class="form-control" placeholder="Start typing to filter devices" />
+            <div class="form-text">Matches are applied to serial number, hostname (name), and asset tag columns only.</div>
+          </div>
+          <div class="col-12 col-md-4 text-md-end">
+            <button id="clear-search" class="btn btn-outline-secondary me-2">Clear</button>
+            <button id="refresh-data" class="btn btn-primary">Reload CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="h5 mb-0">Device results</h2>
+          <div class="form-text text-end">Displaying columns required for quick lookup.</div>
+        </div>
+        <div class="table-responsive">
+          <table id="device-table" class="table table-striped" style="width:100%">
+            <thead>
+              <tr>
+                <th>Hostname</th>
+                <th>Asset Tag</th>
+                <th>Serial Number</th>
+                <th>Location</th>
+                <th>Room</th>
+                <th>Department</th>
+                <th>Floor</th>
+                <th>Last Rounded Date</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./Index - Device Rounding_files/jquery-3.7.1.min.js.download"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="./Index - Device Rounding_files/bootstrap.bundle.min.js.download"></script>
+  <script src="./Index - Device Rounding_files/jquery.dataTables.min.js.download"></script>
+  <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.8/js/dataTables.bootstrap5.min.js"></script>
+
+  <script>
+    const csvPath = 'Data/Computers.csv';
+    let deviceTable;
+
+    function normalizeValue(value) {
+      return value ? String(value).trim() : '';
+    }
+
+    function buildTable(data) {
+      const tableData = data.map((row) => ({
+        hostname: normalizeValue(row.name),
+        assetTag: normalizeValue(row.asset_tag),
+        serialNumber: normalizeValue(row.serial_number),
+        location: normalizeValue(row['location']),
+        room: normalizeValue(row.u_room),
+        department: normalizeValue(row.u_department_location),
+        floor: normalizeValue(row.u_floor),
+        lastRounded: normalizeValue(row.u_last_rounded_date),
+      }));
+
+      if (deviceTable) {
+        deviceTable.clear();
+        deviceTable.rows.add(tableData).draw();
+        return;
+      }
+
+      deviceTable = $('#device-table').DataTable({
+        data: tableData,
+        columns: [
+          { data: 'hostname' },
+          { data: 'assetTag' },
+          { data: 'serialNumber' },
+          { data: 'location' },
+          { data: 'room' },
+          { data: 'department' },
+          { data: 'floor' },
+          { data: 'lastRounded' },
+        ],
+        order: [[0, 'asc']],
+        pageLength: 25,
+        language: {
+          emptyTable: 'No device data found in CSV',
+        },
+      });
+
+      $.fn.dataTable.ext.search.push(function (settings, data) {
+        if (settings.nTable.id !== 'device-table') return true;
+        const query = $('#device-search').val().trim().toLowerCase();
+        if (!query) return true;
+        const hostname = (data[0] || '').toLowerCase();
+        const assetTag = (data[1] || '').toLowerCase();
+        const serial = (data[2] || '').toLowerCase();
+        return hostname.includes(query) || assetTag.includes(query) || serial.includes(query);
+      });
+    }
+
+    function loadCsv() {
+      $('#refresh-data').prop('disabled', true).text('Loading...');
+      Papa.parse(csvPath, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function (results) {
+          buildTable(results.data);
+          $('#refresh-data').prop('disabled', false).text('Reload CSV');
+          $('#device-search').trigger('input');
+        },
+        error: function (error) {
+          console.error('CSV load error', error);
+          $('#refresh-data').prop('disabled', false).text('Reload CSV');
+          alert('Unable to load CSV data. Check console for details.');
+        },
+      });
+    }
+
+    $(document).ready(function () {
+      loadCsv();
+
+      $('#device-search').on('input', function () {
+        if (deviceTable) {
+          deviceTable.draw();
+        }
+      });
+
+      $('#clear-search').on('click', function () {
+        $('#device-search').val('');
+        if (deviceTable) {
+          deviceTable.draw();
+        }
+      });
+
+      $('#refresh-data').on('click', function () {
+        loadCsv();
+      });
+    });
+  </script>
+</body>
+</html>
