@@ -1,0 +1,77 @@
+﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+// for details on configuring this project to bundle and minify static web assets.
+
+// Write your JavaScript code.
+
+
+
+//$(document).ready(function () {
+//    // Toggle sidebar visibility
+//    $("#menu-toggle").click(function () {
+//        $("#sidebar").toggleClass("active");
+//        $(this).toggleClass("active");
+//    });
+
+//    $('#masterDataToggle').click(function () {
+//        $('#masterDataSubmenu').toggle();
+//    });
+
+
+//    $(window).on("resize", function () {
+//        if ($(window).width() < 800) {
+//            $("#sidebar").removeClass("active");
+//            $("#menu-toggle").removeClass("active");
+//            //$(".topcorner").css("display", "none");
+//        } else {
+//            $("#sidebar").addClass("active");
+//            $("#menu-toggle").addClass("active");
+//            //$(".topcorner").css("display", "block");
+//        }
+//    });
+
+
+
+
+//});
+
+
+
+const mobileScreen = window.matchMedia("(max-width: 990px )");
+$(document).ready(function () {
+
+
+    $(".dashboard-nav-dropdown-toggle").click(function () {
+
+        $(this).closest(".dashboard-nav-dropdown")
+            .toggleClass("show")
+            .find(".dashboard-nav-dropdown")
+            .removeClass("show");
+        $(this).parent()
+            .siblings()
+            .removeClass("show");
+    });
+
+    $('.menu-toggle').on('click', function () {
+
+        $('.menu-a.remove-m').toggleClass('current');
+    });
+
+    $(window).on("resize", function () {
+
+        if ($(window).width() < 800) {
+
+            $("#sidebar").removeClass("active");
+            $("#menu-toggle").removeClass("active");
+            //$('#toggleid').hide();
+            //$(".topcorner").css("display", "none");
+        } else {
+
+            $("#sidebar").addClass("active");
+            $("#menu-toggle").addClass("active");
+            //$('#toggleid').show();
+            //$(".topcorner").css("display", "block");
+        }
+    });
+
+});
+

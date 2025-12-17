@@ -1,0 +1,197 @@
+﻿@media (min-width: 320px) and (max-width: 480px) {
+    #grid .k-grid .k-grid-header .k-table,
+    .k-grid .k-grid-content .k-table,
+    .k-grid .k-grid-content-locked .k-table,
+    .k-grid .k-grid-footer .k-table {
+        table-layout: auto;
+    }
+}
+
+
+#grid .k-grid-content td {
+    font-size: 13px !important;
+    font-family: "Noto Sans",sans-serif !important;
+}
+
+#grid .k-cell-inner {
+    background-color: #C2D9FF;
+    font-size: 13px !important;
+    color: #212529 !important;
+    font-family: "Noto Sans",sans-serif !important;
+    font-weight: bold !important;
+    height: 33px !important;
+}
+
+
+#myTable thead {
+    font-size: 13px !important;
+    font-family: "Noto Sans",sans-serif !important;
+    font-weight: bold !important;
+    height: 33px !important;
+    padding-top: 5px;
+}
+
+#myTable td {
+    font-size: 13px !important;
+    font-family: "Noto Sans",sans-serif !important;
+}
+
+#NTTIHealthReptable_wrapper {
+    padding-left: 5px;
+}
+
+#NTTIHealthReptable thead {
+    font-size: 13px !important;
+    font-family: "Noto Sans",sans-serif !important;
+    font-weight: bold !important;
+    height: 33px !important;
+}
+
+#NTTIHealthReptable td {
+    font-size: 13px !important;
+    font-family: "Noto Sans",sans-serif !important;
+}
+/*for all grids common start*/
+.table > :not(:last-child) > :last-child > * {
+    /* border-bottom-color: yellow;*/
+    background-color: #c2d9ff
+}
+
+
+
+.griddv {
+    margin-top: 20px;
+    border-radius: 16px;
+    background-color: white;
+}
+
+.grid-body {
+    margin-top: 20px;
+    border-radius: 30px;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-family: 'Noto Sans', sans-serif;
+}
+/*for all grids common end*/
+
+/*issues form filters*/
+.col-4_text-end {
+    display: inline-flex;
+    margin-left: 10px;
+}
+/*maintanence form filters*/
+.col-md-3 {
+    display: inline-flex;
+    margin-left: 10px;
+}
+
+.rowmaintance {
+    display: flex;
+    flex-direction: column;
+}
+
+.table table-bordered table-striped {
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.container {
+    font-family: 'Noto Sans', sans-serif;
+}
+
+
+
+
+#myTable_wrapper {
+    min-height: 500px; /* Adjust the height as needed */
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+/*device datalist UI*/
+.row {
+    background-color: white;
+    color: black;
+}
+
+.table table-bordered {
+    background-color: white;
+}
+
+/*.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    background-color: powderblue;
+    border: 1px ;
+    border-color:black;
+    border-width:1px;*/
+/*border-radius: 5px;*/ /* Optional: Adds rounded corners to the borders */
+/*padding: 5px 10px;*/ /* Optional: Adds padding to the list items for spacing */
+/*margin: 5px 0;*/ /* Optional: Adds margin for spacing between list items */
+/*border-bottom: 1px solid black;
+}*/
+
+/* Add a border to the selected tab */
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    background-color: #0079A1 !important;
+    border: 1px solid black !important; /* Add border property */
+    color: white !important;
+}
+
+
+.nav-tabs .nav-item:not(.show) .nav-link:hover {
+    background-color: #fff; /* Set the background color you want on hover */
+    border: 1px solid black; /* Set the border color and style on hover */
+    color: #495057; /* Set the text color on hover */
+}
+
+
+
+/*devicelist start*/
+.col-md-3 {
+    display: inline-flex;
+    margin-left: auto;
+}
+
+.h6, h6 {
+    font-size: 1rem;
+}
+
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    font-size: 1.2rem;
+}
+
+.table table-bordered {
+    background-color: #C2D9FF;
+}
+
+.table-headerr {
+    background-color: #000;
+}
+
+.nav-tabs .nav-link {
+    border-bottom: 1px solid black;
+    color: #0079A1;
+}
+
+container.row.col-md-6.form-group {
+    width: 180px;
+}
+/*devicelist end*/
+
+.text-primary {
+    color: #0079A1 !important;
+    font-size: 26px;
+}
+
+.btn.btn-primary {
+    background-color: #0079A1;
+    border-color: #0079A1;
+}
+
+.lblfonts {
+    font-family: 'Noto Sans', sans-serif;
+}
